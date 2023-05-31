@@ -23,6 +23,7 @@ namespace MyLeasing.Web.Data
 
             if (!_context.owners.Any())
             {
+                AddOwner("Joel", "Exemplo0");
                 AddOwner("Afonso", "Exemplo1");
                 AddOwner("Miguel", "Exemplo2");
                 AddOwner("Ricardo", "Exemplo3");
@@ -32,7 +33,6 @@ namespace MyLeasing.Web.Data
                 AddOwner("Bruno", "Exemplo7");
                 AddOwner("Duarte", "Exemplo8");
                 AddOwner("Carlos", "Exemplo9");
-                AddOwner("Joel", "Exemplo10");
                 await _context.SaveChangesAsync();
             }
         }
