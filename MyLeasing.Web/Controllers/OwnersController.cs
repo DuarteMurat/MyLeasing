@@ -54,7 +54,7 @@ namespace MyLeasing.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Document,Name,PhoneNumber,Fixed_PhoneNumber,Address")] Owner owner)
+        public async Task<IActionResult> Create([Bind("Id,Document,FirstName,LastName,PhoneNumber,Fixed_PhoneNumber,Address")] Owner owner)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace MyLeasing.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Document,Name,PhoneNumber,Fixed_PhoneNumber,Address")] Owner owner)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Document,FirstName,LastName,PhoneNumber,Fixed_PhoneNumber,Address")] Owner owner)
         {
             if (id != owner.Id)
             {

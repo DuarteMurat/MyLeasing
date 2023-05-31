@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace MyLeasing.Web.Data.Entities
 {
@@ -10,7 +11,9 @@ namespace MyLeasing.Web.Data.Entities
         public string Document { get; set; }
         
         [Required]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
         
         [MaxLength(9), Display(Name = "Cell Phone")]
         public string PhoneNumber { get; set; }
@@ -20,5 +23,14 @@ namespace MyLeasing.Web.Data.Entities
         
         [Required]
         public string Address { get; set; }
+
+        [Display(Name ="Name")]
+        public string CompleteName
+        {
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
     }
 }

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<MyLeasing.Web.Data.Entities.Owner>
 
 @{
-    ViewData["Title"] = "Onwers";
+    ViewData["Title"] = "Index";
 }
 
-<h1>List of Owners</h1>
+<h1>Owners</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Document)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.CompleteName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -37,7 +37,10 @@
                 @Html.DisplayFor(modelItem => item.Document)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
