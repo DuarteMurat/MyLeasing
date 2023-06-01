@@ -7,22 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyLeasing.Web.Data;
 using MyLeasing.Web.Data.Entities;
+using MyLeasing.Web.Helpers;
 
 namespace MyLeasing.Web.Controllers
 {
     public class OwnersController : Controller
     {
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IUserHelper _userHelper;
 
-        public OwnersController(IOwnerRepository ownerRepository)
+        public OwnersController(
+            IOwnerRepository ownerRepository,
+            IUserHelper userHelper)
         {
             _ownerRepository = ownerRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Owners
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(_ownerRepository.GetAll());
+            return View(_ownerRepository.GetAll().OrderBy(p => p.FirstName));
         }
 
         // GET: Owners/Details/5
@@ -53,11 +58,19 @@ namespace MyLeasing.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Document,FirstName,LastName,PhoneNumber,Fixed_PhoneNumber,Address")] Owner owner)
+        public async Task<IActionResult> Create(Owner owner) //[Bind("Id,Document,FirstName,LastName,PhoneNumber,Fixed_PhoneNumber,Address")]
         {
             if (ModelState.IsValid)
             {
+                owner.User = new User
+                {
+                    Document = owner.Document,
+                    FirstName = owner.FirstName,
+                    LastName = owner.LastName,
+                    Address = owner.Address,
+                };
                 await _ownerRepository.CreateAsync(owner);
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(owner);
@@ -84,7 +97,7 @@ namespace MyLeasing.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Document,FirstName,LastName,PhoneNumber,Fixed_PhoneNumber,Address")] Owner owner)
+        public async Task<IActionResult> Edit(int id,Owner owner) //[Bind("Id,Document,FirstName,LastName,PhoneNumber,Fixed_PhoneNumber,Address")]
         {
             if (id != owner.Id)
             {
@@ -135,8 +148,8 @@ namespace MyLeasing.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _ownerRepository.GetByIdAsync(id);
-            await _ownerRepository.DeleteAsync(product);
+            var owner = await _ownerRepository.GetByIdAsync(id);
+            await _ownerRepository.DeleteAsync(owner);
             return RedirectToAction(nameof(Index));
         }
     }

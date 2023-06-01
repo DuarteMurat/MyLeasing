@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using MyLeasing.Web.Data.Entities;
+using MyLeasing.Web.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyLeasing.Web.Data
 {
@@ -9,11 +11,15 @@ namespace MyLeasing.Web.Data
     {
         private readonly DataContext _context;
 
+        private readonly IUserHelper _userHelper;
+
         private Random _random;
 
-        public SeedDb(DataContext context)
+
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
             _random = new Random();
         }
 
@@ -21,23 +27,43 @@ namespace MyLeasing.Web.Data
         {
             await _context.Database.EnsureCreatedAsync();
 
+            var user = await _userHelper.GetUSerByEmailAsync("duartemurat@gmail.com");
+            if (user == null)
+            {
+                user = new User
+                {
+                    FirstName = "Duarte",
+                    LastName = "Marques",
+                    Email = "duartemurat@gmail.com",
+                    UserName = "duartemurat@gmail.com",
+                    PhoneNumber = "214524731",
+                    Document = "87654321",
+                };
+
+                var result = await _userHelper.AddUserAsync(user, "123456");
+                if (result != IdentityResult.Success)
+                {
+                    throw new InvalidOperationException("Could not create the user in seeder");
+                }
+            }
+
             if (!_context.owners.Any())
             {
-                AddOwner("Joel", "Exemplo0");
-                AddOwner("Afonso", "Exemplo1");
-                AddOwner("Miguel", "Exemplo2");
-                AddOwner("Ricardo", "Exemplo3");
-                AddOwner("Jose", "Exemplo4");
-                AddOwner("Diogo", "Exemplo5");
-                AddOwner("Rafael", "Exemplo6");
-                AddOwner("Bruno", "Exemplo7");
-                AddOwner("Duarte", "Exemplo8");
-                AddOwner("Carlos", "Exemplo9");
+                AddOwner("Joel", "Exemplo" ,user);
+                AddOwner("Afonso", "Exemplo", user);
+                AddOwner("Miguel", "Exemplo", user);
+                AddOwner("Ricardo", "Exemplo", user);
+                AddOwner("Jose", "Exemplo", user);
+                AddOwner("Diogo", "Exemplo", user);
+                AddOwner("Rafael", "Exemplo", user);
+                AddOwner("Bruno", "Exemplo", user);
+                AddOwner("Duarte", "Exemplo", user);
+                AddOwner("Carlos", "Exemplo", user);
                 await _context.SaveChangesAsync();
             }
         }
 
-        private void AddOwner(string firstname, string lastname)
+        private void AddOwner(string firstname, string lastname, User user)
         {
             _context.owners.Add(new Owner
             {
@@ -47,6 +73,7 @@ namespace MyLeasing.Web.Data
                 Fixed_PhoneNumber ="123456789",
                 PhoneNumber = "987654321",
                 Address = "Sintra",
+                User = user,
             });
         }
     }
