@@ -61,6 +61,17 @@ namespace MyLeasing.Web.Data
                 AddOwner("Carlos", "Exemplo", user);
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.lessee.Any())
+            {
+                AddLessee("Anabela", "Exemplo", user);
+                AddLessee("Ana", "Exemplo", user);
+                AddLessee("Mariana", "Exemplo", user);
+                AddLessee("Joana", "Exemplo", user);
+                AddLessee("Susana", "Exemplo", user);
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         private void AddOwner(string firstname, string lastname, User user)
@@ -72,6 +83,20 @@ namespace MyLeasing.Web.Data
                 LastName = lastname,
                 Fixed_PhoneNumber ="123456789",
                 PhoneNumber = "987654321",
+                Address = "Sintra",
+                User = user,
+            });
+        }
+
+        private void AddLessee(string firstname, string lastname, User user)
+        {
+            _context.lessee.Add(new Lessee
+            {
+                Document = "12345678",
+                FirstName = firstname,
+                LastName = lastname,
+                Fixed_Phone = "123456789",
+                Cell_Phone = "987654321",
                 Address = "Sintra",
                 User = user,
             });

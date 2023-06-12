@@ -4,17 +4,16 @@ using System.Linq;
 
 namespace MyLeasing.Web.Data
 {
-    public class OwnerRepository : GenericRepository<Owner>, IOwnerRepository
+    public class LesseeRepository : GenericRepository<Lessee>, ILesseeRepository
     {
         private readonly DataContext _context;
-
-        public OwnerRepository(DataContext context) : base(context)
+        public LesseeRepository(DataContext context) : base(context)
         {
             _context = context;
         }
-        public IQueryable GetAllWithUsers()
+        public IQueryable GetAllWithUSers()
         {
-            return _context.owners.Include(p => p.User);
+            return _context.lessee.Include(p => p.User);
         }
     }
 }
